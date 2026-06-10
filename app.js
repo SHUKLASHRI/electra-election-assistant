@@ -1,4 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
@@ -136,23 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-            // SECURITY: API key is obfuscated (Base64) to thwart automated bot scraping.
-            const encodedKey = "YOUR_ENCODED_GEMINI_KEY";
-            const apiKey = atob(encodedKey); 
-            
-            const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ 
-                model: "gemini-2.5-flash",
-                systemInstruction: systemInstruction 
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,
+                    history: chatHistory
+                })
             });
 
-            const chat = model.startChat({
-                history: chatHistory,
-                generationConfig: { maxOutputTokens: 500 }
-            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Unknown error');
+            }
 
-            const result = await chat.sendMessage(message);
-            const responseText = result.response.text();
+            const data = await response.json();
+            const responseText = data.text;
             
             chatMessages.removeChild(loadingDiv);
             addMessage(responseText);
