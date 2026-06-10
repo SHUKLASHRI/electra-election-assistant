@@ -1,3 +1,0 @@
-runtime: nodejs20
-env_variables:
-  GEMINI_API_KEY: "YOUR_GEMINI_API_KEY_HERE" # Replace this with a secure Secret Manager reference in production
