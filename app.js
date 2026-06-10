@@ -1,20 +1,3 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-// Firebase Configuration for Analytics
-const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "electra-election-assistant.firebaseapp.com",
-  projectId: "electra-election-assistant",
-  storageBucket: "electra-election-assistant.firebasestorage.app",
-  messagingSenderId: "358298768682",
-  appId: "1:358298768682:web:554ca26fd31ada8f99ba53",
-  measurementId: "G-1WBYJYWE3X"
-};
-
-// Initialize Firebase & Analytics (Boosts 'Google Services' score!)
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 /**
  * Initializes the Election Assistant application.
