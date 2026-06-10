@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Electra: Your Smart Election Assistant. Understand the election process, timelines, and steps easily.">
+    <title>Electra - Smart Election Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai",
+          "firebase/app": "https://esm.run/firebase/app",
+          "firebase/analytics": "https://esm.run/firebase/analytics"
+        }
+      }
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="background-effects">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <header class="glass-panel">
+        <div class="logo">
+            <span class="icon" aria-hidden="true">🗳️</span>
+            <h1>Electra</h1>
+        </div>
+        <nav>
+            <button aria-label="Toggle Dark/Light Mode" id="theme-toggle">🌙</button>
+            <a href="#assistant" class="nav-link">Assistant</a>
+            <a href="#timeline" class="nav-link">Timeline</a>
+            <a href="#polling" class="nav-link">Polling Station</a>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section id="hero">
+            <h2 class="gradient-text">Navigate Your Election Journey</h2>
+            <p>Your interactive guide to voting. Ask questions, track deadlines, and find where to vote.</p>
+        </section>
+
+        <section id="assistant" class="glass-panel main-section">
+            <div class="section-header">
+                <h3>💬 AI Election Assistant</h3>
+                <span class="badge">Powered by Google Gemini</span>
+            </div>
+            
+            <div id="chat-container">
+                <div class="chat-messages" id="chat-messages" aria-live="polite">
+                    <div class="message ai-message">
+                        <div class="message-content">
+                            Hi! I'm Electra, your smart election assistant. Are you a first-time voter, or do you have a specific question about the process, timelines, or requirements?
+                        </div>
+                    </div>
+                </div>
+                <form id="chat-form" class="input-area">
+                    <div class="input-group">
+                        <input type="text" id="user-input" placeholder="Ask about registration, deadlines..." required aria-label="Your message">
+                        <button type="submit" class="primary-btn" id="send-btn" aria-label="Send message">Send 🚀</button>
+                    </div>
+                    <div id="rate-limit-msg" style="color: #ef4444; font-size: 0.8rem; margin-top: 0.5rem; display: none;">Please wait 10 seconds between messages.</div>
+                </form>
+            </div>
+        </section>
+
+        <section class="grid-layout">
+            <section id="timeline" class="glass-panel main-section">
+                <div class="section-header">
+                    <h3>📅 Election Timeline</h3>
+                    <button id="add-to-calendar" class="secondary-btn" aria-label="Add Election Day to Google Calendar">Add to Google Calendar</button>
+                </div>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Voter Registration Deadline</h4>
+                            <p>Oct 15, 2026 - Ensure your details are up to date.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Mail-in Ballot Request</h4>
+                            <p>Oct 22, 2026 - Last day to request a mail-in ballot.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item active">
+                        <div class="timeline-dot pulse"></div>
+                        <div class="timeline-content">
+                            <h4>Election Day</h4>
+                            <p>Nov 3, 2026 - Polls open from 7 AM to 8 PM.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="polling" class="glass-panel main-section">
+                <div class="section-header">
+                    <h3>📍 Polling Station Finder</h3>
+                    <span class="badge">Google Maps Integration</span>
+                </div>
+                <div class="map-controls">
+                    <input type="text" id="zip-code" placeholder="Enter Zip Code" aria-label="Zip Code">
+                    <button class="secondary-btn" id="find-station-btn">Find</button>
+                </div>
+                <div id="map-container" class="map-placeholder">
+                    <p>Enter your location to find the nearest polling station.</p>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built with ❤️ using Google Services | Designed for Accessibility & Performance</p>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
