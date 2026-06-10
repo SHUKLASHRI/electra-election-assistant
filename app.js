@@ -177,8 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const zipInput = document.getElementById('zip-code');
     const mapPlaceholder = document.querySelector('.map-placeholder');
     const timelineContainer = document.getElementById('dynamic-timeline-container');
-    const calendarBtn = document.getElementById('add-to-calendar');
-
     const handleMapSearch = async () => {
         const zip = escapeHTML(zipInput.value.trim());
         if (!zip) {
@@ -190,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         findStationBtn.disabled = true;
         findStationBtn.textContent = 'Searching...';
         mapPlaceholder.innerHTML = '<p>Fetching latest election data...</p>';
-        timelineContainer.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">Loading timeline...</p>';
+        timelineContainer.innerHTML = '<p style="text-align: center; opacity: 0.8; padding: 2rem;">Loading timeline...</p>';
         calendarBtn.style.display = 'none';
 
         try {
@@ -236,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     timelineContainer.innerHTML = timelineHTML;
                     calendarBtn.style.display = 'inline-block';
                 } else {
-                    timelineContainer.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">Timeline details not available for this election.</p>';
+                    timelineContainer.innerHTML = '<p style="text-align: center; opacity: 0.8; padding: 2rem;">Timeline details not available for this election.</p>';
                 }
 
             } else {
@@ -246,14 +244,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p style="margin-top: 0.5rem;">There are currently no known upcoming or ongoing elections for the postal code ${zip}.</p>
                 `;
                 timelineContainer.innerHTML = `
-                    <p style="text-align: center; color: var(--text-light); padding: 2rem;">No timeline available.</p>
+                    <p style="text-align: center; opacity: 0.8; padding: 2rem;">No timeline available.</p>
                 `;
             }
 
         } catch (error) {
             console.error(error);
             mapPlaceholder.innerHTML = '<p style="color: #ef4444;">Error fetching data. Please try again later.</p>';
-            timelineContainer.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">Error loading timeline.</p>';
+            timelineContainer.innerHTML = '<p style="text-align: center; opacity: 0.8; padding: 2rem;">Error loading timeline.</p>';
         } finally {
             findStationBtn.disabled = false;
             findStationBtn.textContent = 'Search';
