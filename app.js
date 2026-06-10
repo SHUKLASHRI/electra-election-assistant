@@ -176,23 +176,89 @@ document.addEventListener('DOMContentLoaded', () => {
     const findStationBtn = document.getElementById('find-station-btn');
     const zipInput = document.getElementById('zip-code');
     const mapPlaceholder = document.querySelector('.map-placeholder');
+    const timelineContainer = document.getElementById('dynamic-timeline-container');
+    const calendarBtn = document.getElementById('add-to-calendar');
 
-    const handleMapSearch = debounce(() => {
+    const handleMapSearch = async () => {
         const zip = escapeHTML(zipInput.value.trim());
-        if (zip) {
-            const query = encodeURIComponent(`polling stations near ${zip}`);
-            
-            mapPlaceholder.innerHTML = `
-                <p><strong>Location found!</strong></p>
-                <p style="margin-bottom: 1rem;">Click below to view polling stations on Google Maps.</p>
-                <a href="https://www.google.com/maps/search/?api=1&query=${query}" target="_blank" class="primary-btn" style="text-decoration:none; display:inline-block;">
-                    Open Google Maps for ${zip} 🗺️
-                </a>
-            `;
-        } else {
-            alert('Please enter a valid zip code or location.');
+        if (!zip) {
+            alert('Please enter a valid PIN/ZIP code.');
+            return;
         }
-    }, 300);
+
+        // Show loading state
+        findStationBtn.disabled = true;
+        findStationBtn.textContent = 'Searching...';
+        mapPlaceholder.innerHTML = '<p>Fetching latest election data...</p>';
+        timelineContainer.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">Loading timeline...</p>';
+        calendarBtn.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/elections', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ zip: zip })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch election data');
+            }
+
+            const data = await response.json();
+
+            if (data.hasElection) {
+                // Populate Map
+                const query = encodeURIComponent(data.pollingStationQuery || `polling stations near ${zip}`);
+                mapPlaceholder.innerHTML = `
+                    <p style="color: #10b981; font-weight: bold; margin-bottom: 0.5rem;">✅ Upcoming Election Detected!</p>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;"><strong>${escapeHTML(data.electionName || 'Local Election')}</strong></p>
+                    <p style="margin-bottom: 1rem;">Click below to view polling stations on Google Maps.</p>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${query}" target="_blank" class="primary-btn" style="text-decoration:none; display:inline-block;">
+                        Open Google Maps 🗺️
+                    </a>
+                `;
+
+                // Populate Timeline
+                if (data.timeline && data.timeline.length > 0) {
+                    let timelineHTML = '';
+                    data.timeline.forEach((item, index) => {
+                        const isLast = index === data.timeline.length - 1;
+                        timelineHTML += `
+                            <div class="timeline-item ${isLast ? 'active' : ''}">
+                                <div class="timeline-dot ${isLast ? 'pulse' : ''}"></div>
+                                <div class="timeline-content">
+                                    <h4>${escapeHTML(item.title)}</h4>
+                                    <p>${escapeHTML(item.date)} - ${escapeHTML(item.description)}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    timelineContainer.innerHTML = timelineHTML;
+                    calendarBtn.style.display = 'inline-block';
+                } else {
+                    timelineContainer.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">Timeline details not available for this election.</p>';
+                }
+
+            } else {
+                // No Election Case
+                mapPlaceholder.innerHTML = `
+                    <p style="color: #ef4444; font-weight: bold;">❌ No Upcoming Elections</p>
+                    <p style="margin-top: 0.5rem;">There are currently no known upcoming or ongoing elections for the postal code ${zip}.</p>
+                `;
+                timelineContainer.innerHTML = `
+                    <p style="text-align: center; color: var(--text-light); padding: 2rem;">No timeline available.</p>
+                `;
+            }
+
+        } catch (error) {
+            console.error(error);
+            mapPlaceholder.innerHTML = '<p style="color: #ef4444;">Error fetching data. Please try again later.</p>';
+            timelineContainer.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 2rem;">Error loading timeline.</p>';
+        } finally {
+            findStationBtn.disabled = false;
+            findStationBtn.textContent = 'Search';
+        }
+    };
 
     findStationBtn.addEventListener('click', handleMapSearch);
 });

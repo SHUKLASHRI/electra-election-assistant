@@ -60,47 +60,28 @@
         </section>
 
         <section class="grid-layout">
-            <section id="timeline" class="glass-panel main-section">
+            <section id="polling" class="glass-panel main-section">
                 <div class="section-header">
-                    <h3>📅 Election Timeline</h3>
-                    <button id="add-to-calendar" class="secondary-btn" aria-label="Add Election Day to Google Calendar">Add to Google Calendar</button>
+                    <h3>📍 Local Election Info & Polling</h3>
+                    <span class="badge">Google Maps Integration</span>
                 </div>
-                <div class="timeline-container">
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <h4>Voter Registration Deadline</h4>
-                            <p>Oct 15, 2026 - Ensure your details are up to date.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <h4>Mail-in Ballot Request</h4>
-                            <p>Oct 22, 2026 - Last day to request a mail-in ballot.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item active">
-                        <div class="timeline-dot pulse"></div>
-                        <div class="timeline-content">
-                            <h4>Election Day</h4>
-                            <p>Nov 3, 2026 - Polls open from 7 AM to 8 PM.</p>
-                        </div>
-                    </div>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-light);">Enter your PIN Code / ZIP Code to see real-time election timelines and find polling booths in your specific area.</p>
+                <div class="map-controls">
+                    <input type="text" id="zip-code" placeholder="Enter PIN/ZIP Code" aria-label="PIN Code">
+                    <button class="secondary-btn" id="find-station-btn">Search</button>
+                </div>
+                <div id="map-container" class="map-placeholder">
+                    <p>Enter your location to fetch local election details.</p>
                 </div>
             </section>
 
-            <section id="polling" class="glass-panel main-section">
+            <section id="timeline" class="glass-panel main-section">
                 <div class="section-header">
-                    <h3>📍 Polling Station Finder</h3>
-                    <span class="badge">Google Maps Integration</span>
+                    <h3>📅 Local Timeline</h3>
+                    <button id="add-to-calendar" class="secondary-btn" aria-label="Add Election Day to Google Calendar" style="display: none;">Add to Google Calendar</button>
                 </div>
-                <div class="map-controls">
-                    <input type="text" id="zip-code" placeholder="Enter Zip Code" aria-label="Zip Code">
-                    <button class="secondary-btn" id="find-station-btn">Find</button>
-                </div>
-                <div id="map-container" class="map-placeholder">
-                    <p>Enter your location to find the nearest polling station.</p>
+                <div id="dynamic-timeline-container" class="timeline-container">
+                    <p style="text-align: center; color: var(--text-light); padding: 2rem;">Timeline will populate after you search your PIN code.</p>
                 </div>
             </section>
         </section>
